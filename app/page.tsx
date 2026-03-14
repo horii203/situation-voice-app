@@ -52,20 +52,20 @@ export default function Home() {
   };
 
   return (
-    <main className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-950 to-slate-900 text-white">
+    <main className="min-h-screen bg-white text-slate-900">
       <div className="max-w-3xl mx-auto px-4 py-12">
         <div className="text-center mb-10">
           <h1 className="text-4xl font-bold tracking-tight mb-2">
             🎙️ ElevenLabs 音声生成
           </h1>
-          <p className="text-slate-400 text-sm">
+          <p className="text-slate-500 text-sm">
             台本を入力して高品質な音声を生成・再生・ダウンロード
           </p>
         </div>
 
         <div className="space-y-6">
-          <div className="bg-white/5 backdrop-blur rounded-2xl p-6 border border-white/10">
-            <label className="block text-sm font-semibold text-slate-300 mb-3">
+          <div className="bg-slate-50 rounded-2xl p-6 border border-slate-200">
+            <label className="block text-sm font-semibold text-slate-700 mb-3">
               台本・テキスト
             </label>
             <textarea
@@ -73,15 +73,15 @@ export default function Home() {
               onChange={(e) => setText(e.target.value)}
               placeholder="ここに読み上げたいテキストを入力してください..."
               rows={8}
-              className="w-full bg-slate-800/60 rounded-xl px-4 py-3 text-white placeholder-slate-500 border border-white/10 focus:border-purple-500 focus:outline-none focus:ring-2 focus:ring-purple-500/30 resize-none text-sm leading-relaxed"
+              className="w-full bg-white rounded-xl px-4 py-3 text-slate-900 placeholder-slate-400 border border-slate-200 focus:border-slate-400 focus:outline-none focus:ring-2 focus:ring-slate-200 resize-none text-sm leading-relaxed"
             />
-            <div className="mt-2 text-right text-xs text-slate-500">
+            <div className="mt-2 text-right text-xs text-slate-400">
               {text.length} 文字
             </div>
           </div>
 
           {error && (
-            <div className="bg-red-900/30 border border-red-500/40 rounded-xl px-5 py-3 text-red-300 text-sm">
+            <div className="bg-red-50 border border-red-200 rounded-xl px-5 py-3 text-red-600 text-sm">
               ⚠️ {error}
             </div>
           )}
@@ -89,7 +89,7 @@ export default function Home() {
           <button
             onClick={handleGenerate}
             disabled={isGenerating || !text.trim()}
-            className="w-full py-4 rounded-2xl font-bold text-lg transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 active:scale-[0.99] shadow-lg shadow-purple-900/40"
+            className="w-full py-4 rounded-2xl font-bold text-lg transition-all duration-200 disabled:opacity-40 disabled:cursor-not-allowed bg-slate-900 hover:bg-slate-700 text-white active:scale-[0.99] shadow-sm"
           >
             {isGenerating ? (
               <span className="flex items-center justify-center gap-2">
@@ -102,14 +102,19 @@ export default function Home() {
           </button>
 
           {audioUrl && (
-            <div className="bg-white/5 backdrop-blur rounded-2xl p-6 border border-white/10">
-              <h3 className="text-sm font-semibold text-slate-300 mb-4">
+            <div className="bg-slate-50 rounded-2xl p-6 border border-slate-200">
+              <h3 className="text-sm font-semibold text-slate-700 mb-4">
                 生成された音声
               </h3>
-              <audio ref={audioRef} src={audioUrl} controls className="w-full" />
+              <audio
+                ref={audioRef}
+                src={audioUrl}
+                controls
+                className="w-full"
+              />
               <button
                 onClick={handleDownload}
-                className="mt-4 w-full py-3 rounded-xl font-semibold text-sm transition-all duration-200 bg-emerald-700/50 hover:bg-emerald-600/60 border border-emerald-500/30 hover:border-emerald-400/50"
+                className="mt-4 w-full py-3 rounded-xl font-semibold text-sm transition-all duration-200 bg-emerald-600 hover:bg-emerald-500 text-white border-none"
               >
                 ⬇️ MP3をダウンロード
               </button>
@@ -117,7 +122,7 @@ export default function Home() {
           )}
         </div>
 
-        <footer className="mt-12 text-center text-xs text-slate-600">
+        <footer className="mt-12 text-center text-xs text-slate-400">
           Powered by ElevenLabs API
         </footer>
       </div>

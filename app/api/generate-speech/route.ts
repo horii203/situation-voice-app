@@ -5,17 +5,17 @@ export async function POST(request: NextRequest) {
   if (!apiKey) {
     return NextResponse.json(
       { error: "ElevenLabs APIキーが設定されていません" },
-      { status: 500 }
+      { status: 500 },
     );
   }
 
-  const { text, voiceId, modelId, stability, similarityBoost, style } =
+  const { text, voiceId, modelId, stability, similarityBoost, style, speed } =
     await request.json();
 
   if (!text || text.trim() === "") {
     return NextResponse.json(
       { error: "テキストを入力してください" },
-      { status: 400 }
+      { status: 400 },
     );
   }
 
@@ -23,7 +23,7 @@ export async function POST(request: NextRequest) {
   if (!targetVoiceId) {
     return NextResponse.json(
       { error: "ボイスIDが指定されていません" },
-      { status: 400 }
+      { status: 400 },
     );
   }
 
@@ -38,22 +38,23 @@ export async function POST(request: NextRequest) {
         },
         body: JSON.stringify({
           text,
-          model_id: modelId || "eleven_multilingual_v2",
+          model_id: modelId || "eleven_v3",
           voice_settings: {
             stability: stability ?? 0.5,
             similarity_boost: similarityBoost ?? 0.75,
             style: style ?? 0,
             use_speaker_boost: true,
+            speed: speed ?? 0.7,
           },
         }),
-      }
+      },
     );
 
     if (!res.ok) {
       const error = await res.text();
       return NextResponse.json(
         { error: `音声生成に失敗しました: ${error}` },
-        { status: res.status }
+        { status: res.status },
       );
     }
 
