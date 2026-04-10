@@ -1,6 +1,8 @@
 "use client";
 
 import { useCallback, useRef, useState } from "react";
+import { Mic, Download } from "lucide-react";
+import styles from "./page.module.css";
 
 export default function Home() {
   const [text, setText] = useState("");
@@ -37,10 +39,6 @@ export default function Home() {
     prevAudioUrlRef.current = url;
     setAudioUrl(url);
     setIsGenerating(false);
-
-    setTimeout(() => {
-      audioRef.current?.play();
-    }, 100);
   }, [text]);
 
   const handleDownload = () => {
@@ -52,80 +50,113 @@ export default function Home() {
   };
 
   return (
-    <main className="min-h-screen bg-white text-slate-900">
-      <div className="max-w-3xl mx-auto px-4 py-12">
-        <div className="text-center mb-10">
-          <h1 className="text-4xl font-bold tracking-tight mb-2">
-            🎙️ ElevenLabs 音声生成
-          </h1>
-          <p className="text-slate-500 text-sm">
-            台本を入力して高品質な音声を生成・再生・ダウンロード
-          </p>
-        </div>
-
-        <div className="space-y-6">
-          <div className="bg-slate-50 rounded-2xl p-6 border border-slate-200">
-            <label className="block text-sm font-semibold text-slate-700 mb-3">
-              台本・テキスト
-            </label>
-            <textarea
-              value={text}
-              onChange={(e) => setText(e.target.value)}
-              placeholder="ここに読み上げたいテキストを入力してください..."
-              rows={8}
-              className="w-full bg-white rounded-xl px-4 py-3 text-slate-900 placeholder-slate-400 border border-slate-200 focus:border-slate-400 focus:outline-none focus:ring-2 focus:ring-slate-200 resize-none text-sm leading-relaxed"
-            />
-            <div className="mt-2 text-right text-xs text-slate-400">
-              {text.length} 文字
-            </div>
+    <div className={`min-h-screen flex flex-col ${styles.page}`}>
+      <main className="flex-1">
+        <div className="max-w-3xl mx-auto px-4 py-20">
+          <div className="text-center mb-10">
+            <h1
+              className={`text-4xl font-bold tracking-tight mb-2 drop-shadow-sm ${styles.title}`}
+            >
+              （名前考え中）
+            </h1>
+            <p className={`text-sm ${styles.subtitle}`}>
+              好きな台本を入力して、音声を生成してね
+            </p>
           </div>
 
-          {error && (
-            <div className="bg-red-50 border border-red-200 rounded-xl px-5 py-3 text-red-600 text-sm">
-              ⚠️ {error}
-            </div>
-          )}
-
-          <button
-            onClick={handleGenerate}
-            disabled={isGenerating || !text.trim()}
-            className="w-full py-4 rounded-2xl font-bold text-lg transition-all duration-200 disabled:opacity-40 disabled:cursor-not-allowed bg-slate-900 hover:bg-slate-700 text-white active:scale-[0.99] shadow-sm"
-          >
-            {isGenerating ? (
-              <span className="flex items-center justify-center gap-2">
-                <span className="inline-block w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
-                生成中...
-              </span>
-            ) : (
-              "🎙️ 音声を生成する"
-            )}
-          </button>
-
-          {audioUrl && (
-            <div className="bg-slate-50 rounded-2xl p-6 border border-slate-200">
-              <h3 className="text-sm font-semibold text-slate-700 mb-4">
-                生成された音声
-              </h3>
-              <audio
-                ref={audioRef}
-                src={audioUrl}
-                controls
-                className="w-full"
+          <div className="space-y-6">
+            <div>
+              <textarea
+                value={text}
+                onChange={(e) => setText(e.target.value)}
+                placeholder="ここに読み上げたいテキストを入力してください..."
+                rows={8}
+                className={`w-full bg-white rounded-xl px-4 py-3 border resize-none text-sm leading-relaxed ${styles.textarea}`}
               />
-              <button
-                onClick={handleDownload}
-                className="mt-4 w-full py-3 rounded-xl font-semibold text-sm transition-all duration-200 bg-emerald-600 hover:bg-emerald-500 text-white border-none"
-              >
-                ⬇️ MP3をダウンロード
-              </button>
+              <div className={`mt-2 text-right text-xs ${styles.charCount}`}>
+                {text.length} 文字
+              </div>
             </div>
-          )}
-        </div>
 
-        <footer className="mt-12 text-center text-xs text-slate-400">
-          Powered by ElevenLabs API
-        </footer>
-      </div>
-    </main>
+            {error && (
+              <div className="bg-red-50 border border-red-200 rounded-xl px-5 py-3 text-red-400 text-sm">
+                ⚠️ {error}
+              </div>
+            )}
+
+            <button
+              onClick={handleGenerate}
+              disabled={isGenerating || !text.trim()}
+              className={`w-full py-4 rounded-full font-bold text-lg transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed active:scale-[0.99] shadow-sm ${styles.btnGenerate}`}
+            >
+              {isGenerating ? (
+                <span className="flex items-center justify-center gap-2">
+                  <span className="inline-block w-4 h-4 border-2 border-white/40 border-t-white rounded-full animate-spin" />
+                  生成中...
+                </span>
+              ) : (
+                <span className="flex items-center justify-center gap-2">
+                  <Mic className="w-5 h-5" />
+                  音声を生成する
+                </span>
+              )}
+            </button>
+
+            {audioUrl && (
+              <div
+                className={`rounded-2xl p-6 border shadow-sm ${styles.audioCard}`}
+              >
+                <h3
+                  className={`text-sm font-semibold mb-4 ${styles.audioCardLabel}`}
+                >
+                  完成したよ！
+                </h3>
+                <audio
+                  ref={audioRef}
+                  src={audioUrl}
+                  controls
+                  className="w-full"
+                />
+                <button
+                  onClick={handleDownload}
+                  className={`mt-10 w-full py-3 rounded-full font-semibold text-sm transition-all duration-200 border-none ${styles.btnDownload}`}
+                >
+                  <span className="flex items-center justify-center gap-2">
+                    <Download className="w-4 h-4" />
+                    MP3をダウンロード
+                  </span>
+                </button>
+              </div>
+            )}
+          </div>
+        </div>
+      </main>
+      <footer className={`border-t px-4 py-8 text-s ${styles.footer}`}>
+        <div className="max-w-5xl mx-auto">
+          <p
+            className={`font-semibold mb-3 text-center ${styles.footerHeading}`}
+          >
+            ⚠️ ご利用にあたっての注意事項
+          </p>
+          <ul className="text-sm space-y-2 list-disc list-inside">
+            <li>
+              本サービスで生成された音声の利用について、当サービスは一切の責任を負いません。
+            </li>
+            <li>
+              生成された音声を使用したことにより生じたトラブル、損害、第三者との紛争等について、当サービスは関与せず、一切の責任を負いかねます。
+            </li>
+            <li>
+              他人の権利を侵害する内容、違法・不適切な内容での利用は固く禁じます。
+            </li>
+            <li>
+              生成された音声の商業利用、悪用、なりすまし等は禁止です。ご自身の責任において適切にご利用ください。
+            </li>
+          </ul>
+          <p className={`text-sm mt-6 text-center ${styles.footerNote}`}>
+            Powered by ElevenLabs API
+          </p>
+        </div>
+      </footer>
+    </div>
   );
 }

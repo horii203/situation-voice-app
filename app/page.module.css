@@ -1,0 +1,64 @@
+/* ページ全体 */
+.page {
+  background-color: #fdf5f7;
+  color: #291e23;
+}
+
+/* タイトル */
+.title {
+  color: #e879a0;
+}
+
+/* サブテキスト */
+.subtitle {
+  color: #291e23;
+}
+
+/* 文字数カウント */
+.charCount {
+  color: #291e23;
+}
+
+/* テキストエリア */
+.textarea {
+  border-color: #f5c6da;
+  color: #291e23;
+}
+.textarea:focus {
+  border-color: #e879a0;
+  outline: none;
+  box-shadow: 0 0 0 3px #fce7f3;
+}
+
+/* 生成ボタン */
+.btnGenerate {
+  background-color: #e899b8;
+  color: #ffffff;
+}
+.btnGenerate:hover:not(:disabled) {
+  background-color: #d97aa6;
+}
+
+/* 音声カード */
+.audioCard {
+  background-color: #ffffff;
+  border-color: #f5c6da;
+}
+.audioCardLabel {
+  color: #291e23;
+}
+
+/* ダウンロードボタン */
+.btnDownload {
+  background-color: #ffffff;
+  border: 2px solid #f5c6da;
+}
+.btnDownload:hover {
+  background-color: #e879a0;
+}
+
+/* フッター */
+.footer {
+  background-color: #ffecf6;
+  border-top-color: #f5c6da;
+}
