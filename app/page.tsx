@@ -72,9 +72,10 @@ export default function Home() {
           <div className="space-y-6">
             <div>
               <textarea
+                id="script-input"
                 value={text}
                 onChange={(e) => setText(e.target.value.slice(0, 5000))}
-                placeholder="ここに読み上げたいテキストを入力してください..."
+                placeholder="ここに読み上げたいテキストを入力..."
                 rows={8}
                 maxLength={5000}
                 className={`w-full bg-white rounded-xl px-4 py-3 border resize-none text-sm leading-relaxed ${styles.textarea}`}
