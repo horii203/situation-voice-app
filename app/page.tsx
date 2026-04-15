@@ -1,6 +1,7 @@
 "use client";
 
 import { useCallback, useRef, useState } from "react";
+import Image from "next/image";
 import { Mic, Download } from "lucide-react";
 import styles from "./page.module.css";
 
@@ -52,15 +53,19 @@ export default function Home() {
   return (
     <div className={`min-h-screen flex flex-col ${styles.page}`}>
       <main className="flex-1">
-        <div className="max-w-3xl mx-auto px-4 py-20">
+        <div className="max-w-3xl mx-auto px-4 pt-10 pb-20">
           <div className="text-center mb-10">
-            <h1
-              className={`text-4xl font-bold tracking-tight mb-2 drop-shadow-sm ${styles.title}`}
-            >
-              （名前考え中）
-            </h1>
-            <p className={`text-sm ${styles.subtitle}`}>
-              好きな台本を入力して、音声を生成してね
+            <Image
+              src="/logo.svg"
+              alt="こえノートのロゴ"
+              width={360}
+              height={96}
+              className="mx-auto mb-6 w-60 md:w-[360px]"
+            />
+            <p className={`text-s ${styles.subtitle}`}>
+              書いた言葉が、声になる。
+              <br />
+              あなただけの世界を自由に描こう。
             </p>
           </div>
 
@@ -153,7 +158,7 @@ export default function Home() {
             </li>
           </ul>
           <p className={`text-sm mt-6 text-center ${styles.footerNote}`}>
-            Powered by ElevenLabs API
+            &copy; 2026 coenote. All rights reserved.
           </p>
         </div>
       </footer>
