@@ -9,8 +9,9 @@ const zenMaruGothic = Zen_Maru_Gothic({
 });
 
 export const metadata: Metadata = {
-  title: "ElevenLabs 音声生成ツール",
-  description: "台本を入力して音声を生成・再生・ダウンロードできるツール",
+  title: "COENOTE - 書いた言葉が、声になる。",
+  description:
+    "COENOTEは、あなたの書いた台本をもとに、夢のような音声を生成するアプリです。好きなシチュエーションを自由に描いて、あなただけの世界を表現しましょう。",
 };
 
 export default function RootLayout({
@@ -19,10 +20,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <body
-        className={`${zenMaruGothic.variable} antialiased`}
-      >
+    <html lang="ja">
+      <body className={`${zenMaruGothic.variable} antialiased`}>
         {children}
       </body>
     </html>
