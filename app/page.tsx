@@ -73,13 +73,16 @@ export default function Home() {
             <div>
               <textarea
                 value={text}
-                onChange={(e) => setText(e.target.value)}
+                onChange={(e) => setText(e.target.value.slice(0, 5000))}
                 placeholder="ここに読み上げたいテキストを入力してください..."
                 rows={8}
+                maxLength={5000}
                 className={`w-full bg-white rounded-xl px-4 py-3 border resize-none text-sm leading-relaxed ${styles.textarea}`}
               />
-              <div className={`mt-2 text-right text-xs ${styles.charCount}`}>
-                {text.length} 文字
+              <div
+                className={`mt-2 text-right text-sm ${text.length >= 5000 ? "text-red-400" : styles.charCount}`}
+              >
+                {text.length} / 5000 文字
               </div>
             </div>
 
