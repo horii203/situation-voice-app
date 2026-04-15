@@ -2,6 +2,7 @@
 
 import { useCallback, useRef, useState } from "react";
 import Image from "next/image";
+import Link from "next/link";
 import { Mic, Download } from "lucide-react";
 import styles from "./page.module.css";
 
@@ -161,6 +162,14 @@ export default function Home() {
               生成された音声の商業利用、悪用、なりすまし等は禁止です。ご自身の責任において適切にご利用ください。
             </li>
           </ul>
+          <p className="text-sm mt-6 text-center">
+            <Link
+              href="/tokushoho"
+              className="underline underline-offset-2 hover:opacity-70 transition-opacity"
+            >
+              特定商取引法に基づく表記
+            </Link>
+          </p>
           <p className={`text-sm mt-6 text-center ${styles.footerNote}`}>
             &copy; 2026 coenote. All rights reserved.
           </p>
