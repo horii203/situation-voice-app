@@ -12,6 +12,19 @@ export const metadata: Metadata = {
   title: "COENOTE - 書いた言葉が、声になる。",
   description:
     "COENOTEは、あなたの書いた台本をもとに、夢のような音声を生成するアプリです。好きなシチュエーションを自由に描いて、あなただけの世界を表現しましょう。",
+  openGraph: {
+    title: "COENOTE - 書いた言葉が、声になる。",
+    description:
+      "COENOTEは、あなたの書いた台本をもとに、夢のような音声を生成するアプリです。好きなシチュエーションを自由に描いて、あなただけの世界を表現しましょう。",
+    images: [{ url: "/ogp.jpg" }],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "COENOTE - 書いた言葉が、声になる。",
+    description:
+      "COENOTEは、あなたの書いた台本をもとに、夢のような音声を生成するアプリです。好きなシチュエーションを自由に描いて、あなただけの世界を表現しましょう。",
+    images: ["/ogp.jpg"],
+  },
 };
 
 export default function RootLayout({
