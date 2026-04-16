@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 
 export const metadata: Metadata = {
   title: "特定商取引法に基づく表記 | COENOTE",
@@ -67,6 +68,14 @@ export default function TokushohoPage() {
       style={{ backgroundColor: "#fdf5f7", color: "#291e23" }}
     >
       <main className="max-w-3xl mx-auto px-4 py-16">
+        <div className="mb-6">
+          <Link
+            href="/"
+            className="text-sm underline underline-offset-2 hover:opacity-70 transition-opacity"
+          >
+            ← トップへ戻る
+          </Link>
+        </div>
         <h1 className="text-2xl font-bold mb-10" style={{ color: "#e879a0" }}>
           特定商取引法に基づく表記
         </h1>

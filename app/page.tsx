@@ -162,12 +162,18 @@ export default function Home() {
               生成された音声の商業利用、悪用、なりすまし等は禁止です。ご自身の責任において適切にご利用ください。
             </li>
           </ul>
-          <p className="text-sm mt-6 text-center">
+          <p className="text-sm mt-6 text-center space-x-4">
             <Link
               href="/tokushoho"
               className="underline underline-offset-2 hover:opacity-70 transition-opacity"
             >
               特定商取引法に基づく表記
+            </Link>
+            <Link
+              href="/privacy"
+              className="underline underline-offset-2 hover:opacity-70 transition-opacity"
+            >
+              プライバシーポリシー
             </Link>
           </p>
           <p className={`text-sm mt-6 text-center ${styles.footerNote}`}>
