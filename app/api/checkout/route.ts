@@ -19,6 +19,10 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: "テキストを入力してください" }, { status: 400 });
     }
 
+    if (text.length <= 100) {
+      return NextResponse.json({ error: "100文字以下は無料で生成できます" }, { status: 400 });
+    }
+
     if (text.length > 5000) {
       return NextResponse.json({ error: "5000文字以内で入力してください" }, { status: 400 });
     }

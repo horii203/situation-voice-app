@@ -1,24 +1,62 @@
 "use client";
 
-import { useCallback, useState } from "react";
+import { useCallback, useRef, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { Mic, ChevronDown } from "lucide-react";
+import { Mic, ChevronDown, Download } from "lucide-react";
 import styles from "./page.module.css";
+
+function getPrice(len: number): number | "無料" | null {
+  if (len === 0) return null;
+  if (len <= 100) return "無料";
+  if (len <= 2000) return 500;
+  return 1000;
+}
 
 export default function Home() {
   const [text, setText] = useState("");
   const [isGenerating, setIsGenerating] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [priceOpen, setPriceOpen] = useState(false);
+  const [audioUrl, setAudioUrl] = useState<string | null>(null);
+  const prevAudioUrlRef = useRef<string | null>(null);
 
-  const price = text.length === 0 ? null : text.length <= 2000 ? 500 : 1000;
+  const price = getPrice(text.length);
 
   const handleGenerate = useCallback(async () => {
     if (!text.trim()) return;
     setError(null);
     setIsGenerating(true);
+    setAudioUrl(null);
 
+    if (prevAudioUrlRef.current) {
+      URL.revokeObjectURL(prevAudioUrlRef.current);
+    }
+
+    // 無料：直接生成
+    if (text.length <= 100) {
+      const res = await fetch("/api/generate-speech", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ text }),
+      });
+
+      if (!res.ok) {
+        const data = await res.json();
+        setError(data.error ?? "音声生成に失敗しました");
+        setIsGenerating(false);
+        return;
+      }
+
+      const blob = await res.blob();
+      const url = URL.createObjectURL(blob);
+      prevAudioUrlRef.current = url;
+      setAudioUrl(url);
+      setIsGenerating(false);
+      return;
+    }
+
+    // 有料：Stripe決済へ
     localStorage.setItem("pending_tts_text", text);
 
     const res = await fetch("/api/checkout", {
@@ -37,6 +75,14 @@ export default function Home() {
     const { url } = await res.json();
     window.location.href = url;
   }, [text]);
+
+  const handleDownload = () => {
+    if (!audioUrl) return;
+    const a = document.createElement("a");
+    a.href = audioUrl;
+    a.download = `voice_${Date.now()}.mp3`;
+    a.click();
+  };
 
   return (
     <div className={`min-h-screen flex flex-col ${styles.page}`}>
@@ -83,7 +129,7 @@ export default function Home() {
 
             {price !== null && (
               <p className="text-right text-xl font-bold" style={{ color: "#291e23" }}>
-                ¥{price.toLocaleString()}
+                {price === "無料" ? "無料" : `¥${price.toLocaleString()}`}
               </p>
             )}
 
@@ -95,15 +141,33 @@ export default function Home() {
               {isGenerating ? (
                 <span className="flex items-center justify-center gap-2">
                   <span className="inline-block w-4 h-4 border-2 border-white/40 border-t-white rounded-full animate-spin" />
-                  処理中...
+                  {text.length <= 100 ? "生成中..." : "処理中..."}
                 </span>
               ) : (
                 <span className="flex items-center justify-center gap-2">
                   <Mic className="w-5 h-5" />
-                  決済して音声を生成する
+                  {text.length <= 100 && text.length > 0 ? "無料で音声を生成する" : "決済して音声を生成する"}
                 </span>
               )}
             </button>
+
+            {audioUrl && (
+              <div className={`rounded-2xl p-6 border shadow-sm ${styles.audioCard}`}>
+                <h3 className={`text-sm font-semibold mb-4 ${styles.audioCardLabel}`}>
+                  完成したよ！
+                </h3>
+                <audio src={audioUrl} controls className="w-full" />
+                <button
+                  onClick={handleDownload}
+                  className={`mt-6 w-full py-3 rounded-full font-semibold text-sm transition-all duration-200 border-none ${styles.btnDownload}`}
+                >
+                  <span className="flex items-center justify-center gap-2">
+                    <Download className="w-4 h-4" />
+                    MP3をダウンロード
+                  </span>
+                </button>
+              </div>
+            )}
 
             {/* 料金アコーディオン */}
             <div className="rounded-xl border overflow-hidden" style={{ borderColor: "#f5c6da" }}>
@@ -119,17 +183,18 @@ export default function Home() {
                 />
               </button>
               {priceOpen && (
-                <div className="grid grid-cols-2" style={{ backgroundColor: "#fff" }}>
-                  <div className="px-5 py-4">
+                <div className="grid grid-cols-3 divide-x divide-[#f5c6da]" style={{ backgroundColor: "#fff" }}>
+                  <div className="px-4 py-4">
+                    <p className="text-xs font-semibold mb-1" style={{ color: "#b08090" }}>お試し</p>
+                    <p className="text-2xl font-bold" style={{ color: "#291e23" }}>無料</p>
+                    <p className="text-xs mt-1" style={{ color: "#b08090" }}>〜100文字</p>
+                  </div>
+                  <div className="px-4 py-4">
                     <p className="text-xs font-semibold mb-1" style={{ color: "#b08090" }}>ショート</p>
                     <p className="text-2xl font-bold" style={{ color: "#291e23" }}>¥500</p>
                     <p className="text-xs mt-1" style={{ color: "#b08090" }}>〜2,000文字</p>
-                    <ul className="text-xs mt-3 space-y-1" style={{ color: "#7a5566" }}>
-                      <li>・テキスト読み上げ</li>
-                      <li>・MP3ダウンロード</li>
-                    </ul>
                   </div>
-                  <div className="px-5 py-4 relative" style={{ backgroundColor: "#fff5fa" }}>
+                  <div className="px-4 py-4 relative" style={{ backgroundColor: "#fff5fa" }}>
                     <span
                       className="absolute top-3 right-3 text-xs font-bold px-2 py-0.5 rounded-full text-white"
                       style={{ backgroundColor: "#e879a0" }}
@@ -139,10 +204,6 @@ export default function Home() {
                     <p className="text-xs font-semibold mb-1" style={{ color: "#e879a0" }}>ロング</p>
                     <p className="text-2xl font-bold" style={{ color: "#291e23" }}>¥1,000</p>
                     <p className="text-xs mt-1" style={{ color: "#b08090" }}>〜5,000文字</p>
-                    <ul className="text-xs mt-3 space-y-1" style={{ color: "#7a5566" }}>
-                      <li>・テキスト読み上げ</li>
-                      <li>・MP3ダウンロード</li>
-                    </ul>
                   </div>
                 </div>
               )}
@@ -152,36 +213,20 @@ export default function Home() {
       </main>
       <footer className={`border-t px-4 py-8 text-s ${styles.footer}`}>
         <div className="max-w-5xl mx-auto">
-          <p
-            className={`font-semibold mb-3 text-center ${styles.footerHeading}`}
-          >
+          <p className={`font-semibold mb-3 text-center ${styles.footerHeading}`}>
             ⚠️ ご利用にあたっての注意事項
           </p>
           <ul className="text-sm space-y-2 list-disc list-inside">
-            <li>
-              本サービスで生成された音声の利用について、当サービスは一切の責任を負いません。
-            </li>
-            <li>
-              生成された音声を使用したことにより生じたトラブル、損害、第三者との紛争等について、当サービスは関与せず、一切の責任を負いかねます。
-            </li>
-            <li>
-              他人の権利を侵害する内容、違法・不適切な内容での利用は固く禁じます。
-            </li>
-            <li>
-              生成された音声の商業利用、悪用、なりすまし等は禁止です。ご自身の責任において適切にご利用ください。
-            </li>
+            <li>本サービスで生成された音声の利用について、当サービスは一切の責任を負いません。</li>
+            <li>生成された音声を使用したことにより生じたトラブル、損害、第三者との紛争等について、当サービスは関与せず、一切の責任を負いかねます。</li>
+            <li>他人の権利を侵害する内容、違法・不適切な内容での利用は固く禁じます。</li>
+            <li>生成された音声の商業利用、悪用、なりすまし等は禁止です。ご自身の責任において適切にご利用ください。</li>
           </ul>
           <p className="text-sm mt-6 text-center space-x-4">
-            <Link
-              href="/tokushoho"
-              className="underline underline-offset-2 hover:opacity-70 transition-opacity"
-            >
+            <Link href="/tokushoho" className="underline underline-offset-2 hover:opacity-70 transition-opacity">
               特定商取引法に基づく表記
             </Link>
-            <Link
-              href="/privacy"
-              className="underline underline-offset-2 hover:opacity-70 transition-opacity"
-            >
+            <Link href="/privacy" className="underline underline-offset-2 hover:opacity-70 transition-opacity">
               プライバシーポリシー
             </Link>
           </p>
