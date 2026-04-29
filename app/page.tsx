@@ -136,7 +136,7 @@ export default function Home() {
             <button
               onClick={handleGenerate}
               disabled={isGenerating || !text.trim()}
-              className={`w-full py-4 rounded-full font-bold text-lg transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed active:scale-[0.99] shadow-sm ${styles.btnGenerate}`}
+              className={`w-full py-4 rounded-full font-bold text-lg transition-all duration-200 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed active:scale-[0.99] shadow-sm ${styles.btnGenerate}`}
             >
               {isGenerating ? (
                 <span className="flex items-center justify-center gap-2">
@@ -159,7 +159,7 @@ export default function Home() {
                 <audio src={audioUrl} controls className="w-full" />
                 <button
                   onClick={handleDownload}
-                  className={`mt-6 w-full py-3 rounded-full font-semibold text-sm transition-all duration-200 border-none ${styles.btnDownload}`}
+                  className={`mt-6 w-full py-3 rounded-full font-semibold text-sm transition-all duration-200 cursor-pointer border-none ${styles.btnDownload}`}
                 >
                   <span className="flex items-center justify-center gap-2">
                     <Download className="w-4 h-4" />
@@ -173,7 +173,7 @@ export default function Home() {
             <div className="rounded-xl border overflow-hidden" style={{ borderColor: "#f5c6da" }}>
               <button
                 onClick={() => setPriceOpen((v) => !v)}
-                className="w-full flex items-center justify-between px-5 py-3 text-sm font-semibold transition-opacity hover:opacity-70"
+                className="w-full flex items-center justify-between px-5 py-3 text-sm font-semibold transition-opacity hover:opacity-70 cursor-pointer"
                 style={{ backgroundColor: "#ffecf6", color: "#291e23" }}
               >
                 <span>料金について</span>
