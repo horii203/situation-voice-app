@@ -1,29 +1,26 @@
 "use client";
 
-import { useCallback, useRef, useState } from "react";
+import { useCallback, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { Mic, Download } from "lucide-react";
+import { Mic } from "lucide-react";
 import styles from "./page.module.css";
 
 export default function Home() {
   const [text, setText] = useState("");
   const [isGenerating, setIsGenerating] = useState(false);
-  const [audioUrl, setAudioUrl] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
-  const audioRef = useRef<HTMLAudioElement>(null);
-  const prevAudioUrlRef = useRef<string | null>(null);
+
+  const price = text.length === 0 ? null : text.length <= 2000 ? 500 : 1000;
 
   const handleGenerate = useCallback(async () => {
     if (!text.trim()) return;
     setError(null);
     setIsGenerating(true);
 
-    if (prevAudioUrlRef.current) {
-      URL.revokeObjectURL(prevAudioUrlRef.current);
-    }
+    localStorage.setItem("pending_tts_text", text);
 
-    const res = await fetch("/api/generate-speech", {
+    const res = await fetch("/api/checkout", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ text }),
@@ -31,25 +28,14 @@ export default function Home() {
 
     if (!res.ok) {
       const data = await res.json();
-      setError(data.error ?? "音声生成に失敗しました");
+      setError(data.error ?? "エラーが発生しました");
       setIsGenerating(false);
       return;
     }
 
-    const blob = await res.blob();
-    const url = URL.createObjectURL(blob);
-    prevAudioUrlRef.current = url;
-    setAudioUrl(url);
-    setIsGenerating(false);
+    const { url } = await res.json();
+    window.location.href = url;
   }, [text]);
-
-  const handleDownload = () => {
-    if (!audioUrl) return;
-    const a = document.createElement("a");
-    a.href = audioUrl;
-    a.download = `voice_${Date.now()}.mp3`;
-    a.click();
-  };
 
   return (
     <div className={`min-h-screen flex flex-col ${styles.page}`}>
@@ -81,10 +67,13 @@ export default function Home() {
                 maxLength={5000}
                 className={`w-full bg-white rounded-xl px-4 py-3 border resize-none text-sm leading-relaxed ${styles.textarea}`}
               />
-              <div
-                className={`mt-2 text-right text-sm ${text.length >= 5000 ? "text-red-400" : styles.charCount}`}
-              >
-                {text.length} / 5000 文字
+              <div className="mt-2 flex justify-between items-center text-sm">
+                <span style={{ color: "#e879a0", fontWeight: 600 }}>
+                  {price !== null ? `¥${price.toLocaleString()}` : ""}
+                </span>
+                <span className={text.length >= 5000 ? "text-red-400" : styles.charCount}>
+                  {text.length} / 5000 文字
+                </span>
               </div>
             </div>
 
@@ -102,42 +91,19 @@ export default function Home() {
               {isGenerating ? (
                 <span className="flex items-center justify-center gap-2">
                   <span className="inline-block w-4 h-4 border-2 border-white/40 border-t-white rounded-full animate-spin" />
-                  生成中...
+                  処理中...
                 </span>
               ) : (
                 <span className="flex items-center justify-center gap-2">
                   <Mic className="w-5 h-5" />
-                  音声を生成する
+                  決済して音声を生成する
                 </span>
               )}
             </button>
 
-            {audioUrl && (
-              <div
-                className={`rounded-2xl p-6 border shadow-sm ${styles.audioCard}`}
-              >
-                <h3
-                  className={`text-sm font-semibold mb-4 ${styles.audioCardLabel}`}
-                >
-                  完成したよ！
-                </h3>
-                <audio
-                  ref={audioRef}
-                  src={audioUrl}
-                  controls
-                  className="w-full"
-                />
-                <button
-                  onClick={handleDownload}
-                  className={`mt-10 w-full py-3 rounded-full font-semibold text-sm transition-all duration-200 border-none ${styles.btnDownload}`}
-                >
-                  <span className="flex items-center justify-center gap-2">
-                    <Download className="w-4 h-4" />
-                    MP3をダウンロード
-                  </span>
-                </button>
-              </div>
-            )}
+            <p className="text-xs text-center" style={{ color: "#b08090" }}>
+              〜2000文字 ¥500 / 〜5000文字 ¥1,000
+            </p>
           </div>
         </div>
       </main>

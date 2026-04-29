@@ -1,0 +1,46 @@
+import { NextRequest, NextResponse } from "next/server";
+import Stripe from "stripe";
+
+const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
+
+function getPrice(charCount: number): { amount: number; label: string } {
+  if (charCount <= 2000) return { amount: 500, label: "〜2000文字" };
+  return { amount: 1000, label: "〜5000文字" };
+}
+
+export async function POST(request: NextRequest) {
+  const { text } = await request.json();
+
+  if (!text || text.trim() === "") {
+    return NextResponse.json({ error: "テキストを入力してください" }, { status: 400 });
+  }
+
+  if (text.length > 5000) {
+    return NextResponse.json({ error: "5000文字以内で入力してください" }, { status: 400 });
+  }
+
+  const { amount, label } = getPrice(text.length);
+  const origin = request.headers.get("origin") ?? "";
+
+  const session = await stripe.checkout.sessions.create({
+    payment_method_types: ["card"],
+    line_items: [
+      {
+        price_data: {
+          currency: "jpy",
+          product_data: {
+            name: `音声生成（${label}）`,
+            description: `${text.length}文字`,
+          },
+          unit_amount: amount,
+        },
+        quantity: 1,
+      },
+    ],
+    mode: "payment",
+    success_url: `${origin}/success?session_id={CHECKOUT_SESSION_ID}`,
+    cancel_url: `${origin}/`,
+  });
+
+  return NextResponse.json({ url: session.url });
+}
