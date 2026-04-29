@@ -1,14 +1,13 @@
 import { NextRequest, NextResponse } from "next/server";
 import Stripe from "stripe";
 
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
-
 function getPrice(charCount: number): { amount: number; label: string } {
   if (charCount <= 2000) return { amount: 500, label: "〜2000文字" };
   return { amount: 1000, label: "〜5000文字" };
 }
 
 export async function POST(request: NextRequest) {
+  const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
   const { text } = await request.json();
 
   if (!text || text.trim() === "") {
