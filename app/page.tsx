@@ -3,13 +3,14 @@
 import { useCallback, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { Mic } from "lucide-react";
+import { Mic, ChevronDown } from "lucide-react";
 import styles from "./page.module.css";
 
 export default function Home() {
   const [text, setText] = useState("");
   const [isGenerating, setIsGenerating] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [priceOpen, setPriceOpen] = useState(false);
 
   const price = text.length === 0 ? null : text.length <= 2000 ? 500 : 1000;
 
@@ -67,10 +68,7 @@ export default function Home() {
                 maxLength={5000}
                 className={`w-full bg-white rounded-xl px-4 py-3 border resize-none text-sm leading-relaxed ${styles.textarea}`}
               />
-              <div className="mt-2 flex justify-between items-center text-sm">
-                <span style={{ color: "#e879a0", fontWeight: 600 }}>
-                  {price !== null ? `¥${price.toLocaleString()}` : ""}
-                </span>
+              <div className="mt-2 text-right text-sm">
                 <span className={text.length >= 5000 ? "text-red-400" : styles.charCount}>
                   {text.length} / 5000 文字
                 </span>
@@ -81,6 +79,12 @@ export default function Home() {
               <div className="bg-red-50 border border-red-200 rounded-xl px-5 py-3 text-red-400 text-sm">
                 ⚠️ {error}
               </div>
+            )}
+
+            {price !== null && (
+              <p className="text-right text-xl font-bold" style={{ color: "#291e23" }}>
+                ¥{price.toLocaleString()}
+              </p>
             )}
 
             <button
@@ -101,9 +105,48 @@ export default function Home() {
               )}
             </button>
 
-            <p className="text-xs text-center" style={{ color: "#b08090" }}>
-              〜2000文字 ¥500 / 〜5000文字 ¥1,000
-            </p>
+            {/* 料金アコーディオン */}
+            <div className="rounded-xl border overflow-hidden" style={{ borderColor: "#f5c6da" }}>
+              <button
+                onClick={() => setPriceOpen((v) => !v)}
+                className="w-full flex items-center justify-between px-5 py-3 text-sm font-semibold transition-opacity hover:opacity-70"
+                style={{ backgroundColor: "#ffecf6", color: "#291e23" }}
+              >
+                <span>料金について</span>
+                <ChevronDown
+                  className="w-4 h-4 transition-transform duration-200"
+                  style={{ transform: priceOpen ? "rotate(180deg)" : "rotate(0deg)", color: "#e879a0" }}
+                />
+              </button>
+              {priceOpen && (
+                <div className="grid grid-cols-2" style={{ backgroundColor: "#fff" }}>
+                  <div className="px-5 py-4">
+                    <p className="text-xs font-semibold mb-1" style={{ color: "#b08090" }}>ショート</p>
+                    <p className="text-2xl font-bold" style={{ color: "#291e23" }}>¥500</p>
+                    <p className="text-xs mt-1" style={{ color: "#b08090" }}>〜2,000文字</p>
+                    <ul className="text-xs mt-3 space-y-1" style={{ color: "#7a5566" }}>
+                      <li>・テキスト読み上げ</li>
+                      <li>・MP3ダウンロード</li>
+                    </ul>
+                  </div>
+                  <div className="px-5 py-4 relative" style={{ backgroundColor: "#fff5fa" }}>
+                    <span
+                      className="absolute top-3 right-3 text-xs font-bold px-2 py-0.5 rounded-full text-white"
+                      style={{ backgroundColor: "#e879a0" }}
+                    >
+                      人気
+                    </span>
+                    <p className="text-xs font-semibold mb-1" style={{ color: "#e879a0" }}>ロング</p>
+                    <p className="text-2xl font-bold" style={{ color: "#291e23" }}>¥1,000</p>
+                    <p className="text-xs mt-1" style={{ color: "#b08090" }}>〜5,000文字</p>
+                    <ul className="text-xs mt-3 space-y-1" style={{ color: "#7a5566" }}>
+                      <li>・テキスト読み上げ</li>
+                      <li>・MP3ダウンロード</li>
+                    </ul>
+                  </div>
+                </div>
+              )}
+            </div>
           </div>
         </div>
       </main>
