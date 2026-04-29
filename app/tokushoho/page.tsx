@@ -29,7 +29,7 @@ export default function TokushohoPage() {
     },
     {
       label: "販売価格",
-      value: "デジタルコンテンツの購入手続きの際に画面に表示されます。",
+      value: "〜100文字：無料 / 〜2,000文字：¥500 / 〜5,000文字：¥1,000（税込）",
     },
     {
       label: "追加手数料",
