@@ -1,36 +1,98 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# COENOTE（こえノート）
 
-## Getting Started
+テキストを入力すると音声を生成・ダウンロードできるWebサービスです。
 
-First, run the development server:
+## 機能
+
+- テキスト読み上げ（ElevenLabs API）
+- MP3ダウンロード
+- 文字数に応じた料金設定（Stripe決済）
+- 100文字以下は無料で生成可能
+
+## 料金
+
+| プラン | 文字数 | 料金 |
+|--------|--------|------|
+| お試し | 〜100文字 | 無料 |
+| ショート | 〜2,000文字 | ¥500 |
+| ロング | 〜5,000文字 | ¥1,000 |
+
+## 技術スタック
+
+- **フレームワーク**: Next.js 16 (App Router)
+- **言語**: TypeScript
+- **スタイリング**: Tailwind CSS v4
+- **音声生成**: ElevenLabs API
+- **決済**: Stripe
+
+## ディレクトリ構成
+
+```
+app/
+├── page.tsx                    # トップページ
+├── layout.tsx                  # ルートレイアウト
+├── success/page.tsx            # 決済完了・音声生成ページ
+├── cancel/page.tsx             # 決済キャンセルページ
+├── tokushoho/page.tsx          # 特定商取引法に基づく表記
+├── privacy/page.tsx            # プライバシーポリシー
+└── api/
+    ├── checkout/route.ts       # Stripeチェックアウトセッション作成
+    ├── generate-speech/route.ts # ElevenLabs音声生成
+    └── voices/route.ts         # ボイス一覧取得
+```
+
+## セットアップ
+
+### 1. パッケージインストール
+
+```bash
+npm install
+```
+
+### 2. 環境変数の設定
+
+`.env.local` を作成して以下を設定：
+
+```
+ELEVENLABS_API_KEY=your_elevenlabs_api_key
+ELEVENLABS_VOICE_ID=your_voice_id
+STRIPE_SECRET_KEY=sk_test_...
+NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY=pk_test_...
+```
+
+### 3. 開発サーバー起動
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## 決済フロー
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```
+テキスト入力（101文字以上）
+  ↓
+料金表示（¥500 or ¥1,000）
+  ↓
+「決済して音声を生成する」ボタン
+  ↓
+Stripe決済画面
+  ↓
+/success ページで音声生成・ダウンロード
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+100文字以下の場合はStripeを経由せず直接音声を生成します。
 
-## Learn More
+## デプロイ
 
-To learn more about Next.js, take a look at the following resources:
+Vercelを使用。`main`ブランチへのプッシュで本番環境に自動デプロイされます。
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+Vercelの環境変数に以下を設定してください：
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+| 変数名 | 環境 |
+|--------|------|
+| `ELEVENLABS_API_KEY` | All Environments |
+| `ELEVENLABS_VOICE_ID` | All Environments |
+| `STRIPE_SECRET_KEY` | All Environments |
+| `NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY` | All Environments |
 
-## Deploy on Vercel
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
