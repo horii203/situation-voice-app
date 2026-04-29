@@ -169,6 +169,10 @@ export default function Home() {
               </div>
             )}
 
+            <p className="text-center text-sm" style={{ color: "#b08090" }}>
+              現在サービス準備中です。
+            </p>
+
             {/* 料金アコーディオン */}
             <div className="rounded-xl border overflow-hidden" style={{ borderColor: "#f5c6da" }}>
               <button
