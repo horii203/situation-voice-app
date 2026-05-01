@@ -13,7 +13,7 @@ export default function TokushohoPage() {
     },
     {
       label: "運営責任者",
-      value: "請求があった場合には速やかに開示いたします。",
+      value: "草間 里歩",
     },
     {
       label: "所在地",
@@ -29,7 +29,8 @@ export default function TokushohoPage() {
     },
     {
       label: "販売価格",
-      value: "〜100文字：無料 / 〜2,000文字：¥500 / 〜5,000文字：¥1,000（税込）",
+      value:
+        "〜100文字：無料 / 〜2,000文字：¥500 / 〜5,000文字：¥1,000（税込）",
     },
     {
       label: "追加手数料",
