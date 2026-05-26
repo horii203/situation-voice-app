@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+import Stripe from "stripe";
 
 export async function POST(request: NextRequest) {
   const apiKey = process.env.ELEVENLABS_API_KEY;
@@ -9,8 +10,22 @@ export async function POST(request: NextRequest) {
     );
   }
 
-  const { text, voiceId, modelId, stability, similarityBoost, style, speed } =
+  const { text, session_id, voiceId, modelId, stability, similarityBoost, style, speed } =
     await request.json();
+
+  if (text && text.length > 100) {
+    if (!session_id) {
+      return NextResponse.json({ error: "決済が必要です" }, { status: 403 });
+    }
+    if (!process.env.STRIPE_SECRET_KEY) {
+      return NextResponse.json({ error: "Stripe設定エラー" }, { status: 500 });
+    }
+    const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
+    const session = await stripe.checkout.sessions.retrieve(session_id);
+    if (session.payment_status !== "paid") {
+      return NextResponse.json({ error: "決済が完了していません" }, { status: 403 });
+    }
+  }
 
   if (!text || text.trim() === "") {
     return NextResponse.json(

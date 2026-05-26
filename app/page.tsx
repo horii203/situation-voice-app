@@ -115,7 +115,11 @@ export default function Home() {
                 className={`w-full bg-white rounded-xl px-4 py-3 border resize-none text-sm leading-relaxed ${styles.textarea}`}
               />
               <div className="mt-2 text-right text-sm">
-                <span className={text.length >= 5000 ? "text-red-400" : styles.charCount}>
+                <span
+                  className={
+                    text.length >= 5000 ? "text-red-400" : styles.charCount
+                  }
+                >
                   {text.length} / 5000 文字
                 </span>
               </div>
@@ -128,7 +132,10 @@ export default function Home() {
             )}
 
             {price !== null && (
-              <p className="text-right text-xl font-bold" style={{ color: "#291e23" }}>
+              <p
+                className="text-right text-xl font-bold"
+                style={{ color: "#291e23" }}
+              >
                 {price === "無料" ? "無料" : `¥${price.toLocaleString()}`}
               </p>
             )}
@@ -146,14 +153,20 @@ export default function Home() {
               ) : (
                 <span className="flex items-center justify-center gap-2">
                   <Mic className="w-5 h-5" />
-                  {text.length <= 100 && text.length > 0 ? "無料で音声を生成する" : "決済して音声を生成する"}
+                  {text.length <= 100 && text.length > 0
+                    ? "無料で音声を生成する"
+                    : "決済して音声を生成する"}
                 </span>
               )}
             </button>
 
             {audioUrl && (
-              <div className={`rounded-2xl p-6 border shadow-sm ${styles.audioCard}`}>
-                <h3 className={`text-sm font-semibold mb-4 ${styles.audioCardLabel}`}>
+              <div
+                className={`rounded-2xl p-6 border shadow-sm ${styles.audioCard}`}
+              >
+                <h3
+                  className={`text-sm font-semibold mb-4 ${styles.audioCardLabel}`}
+                >
                   完成したよ！
                 </h3>
                 <audio src={audioUrl} controls className="w-full" />
@@ -169,12 +182,11 @@ export default function Home() {
               </div>
             )}
 
-            <p className="text-center text-sm" style={{ color: "#b08090" }}>
-              現在サービス準備中です。
-            </p>
-
             {/* 料金アコーディオン */}
-            <div className="rounded-xl border overflow-hidden" style={{ borderColor: "#f5c6da" }}>
+            <div
+              className="rounded-xl border overflow-hidden"
+              style={{ borderColor: "#f5c6da" }}
+            >
               <button
                 onClick={() => setPriceOpen((v) => !v)}
                 className="w-full flex items-center justify-between px-5 py-3 text-sm font-semibold transition-opacity hover:opacity-70 cursor-pointer"
@@ -183,31 +195,76 @@ export default function Home() {
                 <span>料金について</span>
                 <ChevronDown
                   className="w-4 h-4 transition-transform duration-200"
-                  style={{ transform: priceOpen ? "rotate(180deg)" : "rotate(0deg)", color: "#e879a0" }}
+                  style={{
+                    transform: priceOpen ? "rotate(180deg)" : "rotate(0deg)",
+                    color: "#e879a0",
+                  }}
                 />
               </button>
               {priceOpen && (
-                <div className="grid grid-cols-3 divide-x divide-[#f5c6da]" style={{ backgroundColor: "#fff" }}>
+                <div
+                  className="grid grid-cols-3 divide-x divide-[#f5c6da]"
+                  style={{ backgroundColor: "#fff" }}
+                >
                   <div className="px-4 py-4">
-                    <p className="text-xs font-semibold mb-1" style={{ color: "#b08090" }}>お試し</p>
-                    <p className="text-2xl font-bold" style={{ color: "#291e23" }}>無料</p>
-                    <p className="text-xs mt-1" style={{ color: "#b08090" }}>〜100文字</p>
+                    <p
+                      className="text-xs font-semibold mb-1"
+                      style={{ color: "#b08090" }}
+                    >
+                      お試し
+                    </p>
+                    <p
+                      className="text-2xl font-bold"
+                      style={{ color: "#291e23" }}
+                    >
+                      無料
+                    </p>
+                    <p className="text-xs mt-1" style={{ color: "#b08090" }}>
+                      〜100文字
+                    </p>
                   </div>
                   <div className="px-4 py-4">
-                    <p className="text-xs font-semibold mb-1" style={{ color: "#b08090" }}>ショート</p>
-                    <p className="text-2xl font-bold" style={{ color: "#291e23" }}>¥500</p>
-                    <p className="text-xs mt-1" style={{ color: "#b08090" }}>〜2,000文字</p>
+                    <p
+                      className="text-xs font-semibold mb-1"
+                      style={{ color: "#b08090" }}
+                    >
+                      ショート
+                    </p>
+                    <p
+                      className="text-2xl font-bold"
+                      style={{ color: "#291e23" }}
+                    >
+                      ¥500
+                    </p>
+                    <p className="text-xs mt-1" style={{ color: "#b08090" }}>
+                      〜2,000文字
+                    </p>
                   </div>
-                  <div className="px-4 py-4 relative" style={{ backgroundColor: "#fff5fa" }}>
+                  <div
+                    className="px-4 py-4 relative"
+                    style={{ backgroundColor: "#fff5fa" }}
+                  >
                     <span
                       className="absolute top-3 right-3 text-xs font-bold px-2 py-0.5 rounded-full text-white"
                       style={{ backgroundColor: "#e879a0" }}
                     >
                       人気
                     </span>
-                    <p className="text-xs font-semibold mb-1" style={{ color: "#e879a0" }}>ロング</p>
-                    <p className="text-2xl font-bold" style={{ color: "#291e23" }}>¥1,000</p>
-                    <p className="text-xs mt-1" style={{ color: "#b08090" }}>〜5,000文字</p>
+                    <p
+                      className="text-xs font-semibold mb-1"
+                      style={{ color: "#e879a0" }}
+                    >
+                      ロング
+                    </p>
+                    <p
+                      className="text-2xl font-bold"
+                      style={{ color: "#291e23" }}
+                    >
+                      ¥1,000
+                    </p>
+                    <p className="text-xs mt-1" style={{ color: "#b08090" }}>
+                      〜5,000文字
+                    </p>
                   </div>
                 </div>
               )}
@@ -217,20 +274,36 @@ export default function Home() {
       </main>
       <footer className={`border-t px-4 py-8 text-s ${styles.footer}`}>
         <div className="max-w-5xl mx-auto">
-          <p className={`font-semibold mb-3 text-center ${styles.footerHeading}`}>
+          <p
+            className={`font-semibold mb-3 text-center ${styles.footerHeading}`}
+          >
             ⚠️ ご利用にあたっての注意事項
           </p>
           <ul className="text-sm space-y-2 list-disc list-inside">
-            <li>本サービスで生成された音声の利用について、当サービスは一切の責任を負いません。</li>
-            <li>生成された音声を使用したことにより生じたトラブル、損害、第三者との紛争等について、当サービスは関与せず、一切の責任を負いかねます。</li>
-            <li>他人の権利を侵害する内容、違法・不適切な内容での利用は固く禁じます。</li>
-            <li>生成された音声の商業利用、悪用、なりすまし等は禁止です。ご自身の責任において適切にご利用ください。</li>
+            <li>
+              本サービスで生成された音声の利用について、当サービスは一切の責任を負いません。
+            </li>
+            <li>
+              生成された音声を使用したことにより生じたトラブル、損害、第三者との紛争等について、当サービスは関与せず、一切の責任を負いかねます。
+            </li>
+            <li>
+              他人の権利を侵害する内容、違法・不適切な内容での利用は固く禁じます。
+            </li>
+            <li>
+              生成された音声の商業利用、悪用、なりすまし等は禁止です。ご自身の責任において適切にご利用ください。
+            </li>
           </ul>
           <p className="text-sm mt-6 text-center space-x-4">
-            <Link href="/tokushoho" className="underline underline-offset-2 hover:opacity-70 transition-opacity">
+            <Link
+              href="/tokushoho"
+              className="underline underline-offset-2 hover:opacity-70 transition-opacity"
+            >
               特定商取引法に基づく表記
             </Link>
-            <Link href="/privacy" className="underline underline-offset-2 hover:opacity-70 transition-opacity">
+            <Link
+              href="/privacy"
+              className="underline underline-offset-2 hover:opacity-70 transition-opacity"
+            >
               プライバシーポリシー
             </Link>
           </p>
