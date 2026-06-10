@@ -101,6 +101,11 @@ export default function Home() {
               <br />
               あなただけの世界を自由に描こう。
             </p>
+            <p className="text-xs mt-4" style={{ color: "#7a5566" }}>
+              入力されたテキストから自然な音声を生成し
+              <br />
+              MP3ファイルでダウンロードできます。
+            </p>
           </div>
 
           <div className="space-y-6">
