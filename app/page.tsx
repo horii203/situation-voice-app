@@ -297,6 +297,26 @@ export default function Home() {
             <li>
               生成された音声の商業利用、悪用、なりすまし等は禁止です。ご自身の責任において適切にご利用ください。
             </li>
+            <li>
+              AI生成のため、イントネーションや表現が不自然になる場合があります。
+              問題が発生した場合は
+              <a
+                href="mailto:sui763360@gmail.com"
+                className="underline underline-offset-2 hover:opacity-70 transition-opacity mx-1"
+              >
+                メール
+              </a>
+              または
+              <a
+                href="https://x.com/mirai_coenote"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="underline underline-offset-2 hover:opacity-70 transition-opacity mx-1"
+              >
+                X
+              </a>
+              までお問い合わせください。
+            </li>
           </ul>
           <p className="text-sm mt-6 text-center space-x-4">
             <Link
