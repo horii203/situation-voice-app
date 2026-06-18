@@ -4,6 +4,7 @@ import { useEffect, useRef, useState, Suspense } from "react";
 import { useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { Download } from "lucide-react";
+import { AudioPlayer } from "../components/AudioPlayer";
 
 function SuccessContent() {
   const searchParams = useSearchParams();
@@ -78,7 +79,7 @@ function SuccessContent() {
           <p className="text-sm mb-8" style={{ color: "#7a5566" }}>
             音声が生成されました
           </p>
-          <audio src={audioUrl} controls className="w-full mb-4" />
+          <AudioPlayer src={audioUrl} className="w-full mb-4" />
           <button
             onClick={handleDownload}
             className="w-full py-3 rounded-full font-semibold text-sm text-white transition-opacity hover:opacity-80"

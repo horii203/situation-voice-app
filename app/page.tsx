@@ -5,6 +5,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { Mic, ChevronDown, Download } from "lucide-react";
 import styles from "./page.module.css";
+import { AudioPlayer } from "./components/AudioPlayer";
 
 function getPrice(len: number): number | "無料" | null {
   if (len === 0) return null;
@@ -174,7 +175,7 @@ export default function Home() {
                 >
                   完成したよ！
                 </h3>
-                <audio src={audioUrl} controls className="w-full" />
+                <AudioPlayer src={audioUrl} className="w-full" />
                 <button
                   onClick={handleDownload}
                   className={`mt-6 w-full py-3 rounded-full font-semibold text-sm transition-all duration-200 cursor-pointer border-none ${styles.btnDownload}`}
