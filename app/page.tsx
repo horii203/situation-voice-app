@@ -146,7 +146,7 @@ export default function Home() {
               </p>
             )}
 
-            <button
+            {!audioUrl && <button
               onClick={handleGenerate}
               disabled={isGenerating || !text.trim()}
               className={`w-full py-4 rounded-full font-bold text-lg transition-all duration-200 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed active:scale-[0.99] shadow-sm ${styles.btnGenerate}`}
@@ -164,7 +164,7 @@ export default function Home() {
                     : "決済して音声を生成する"}
                 </span>
               )}
-            </button>
+            </button>}
 
             {audioUrl && (
               <div
