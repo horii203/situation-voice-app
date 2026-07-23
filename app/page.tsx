@@ -146,7 +146,7 @@ export default function Home() {
               </p>
             )}
 
-            {!audioUrl && <button
+            <button
               onClick={handleGenerate}
               disabled={isGenerating || !text.trim()}
               className={`w-full py-4 rounded-full font-bold text-lg transition-all duration-200 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed active:scale-[0.99] shadow-sm ${styles.btnGenerate}`}
@@ -159,12 +159,14 @@ export default function Home() {
               ) : (
                 <span className="flex items-center justify-center gap-2">
                   <Mic className="w-5 h-5" />
-                  {text.length <= 100 && text.length > 0
-                    ? "無料で音声を生成する"
-                    : "決済して音声を生成する"}
+                  {audioUrl
+                    ? "音声を再生成する"
+                    : text.length <= 100 && text.length > 0
+                      ? "無料で音声を生成する"
+                      : "決済して音声を生成する"}
                 </span>
               )}
-            </button>}
+            </button>
 
             {audioUrl && (
               <div
