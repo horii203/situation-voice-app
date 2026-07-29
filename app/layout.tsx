@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import Script from "next/script";
 import { Zen_Maru_Gothic } from "next/font/google";
 import "./globals.css";
 
@@ -35,12 +34,14 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="ja">
-      <body className={`${zenMaruGothic.variable} antialiased`}>
-        <Script
+      <head>
+        <script
+          async
           src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8051852497543818"
-          strategy="lazyOnload"
           crossOrigin="anonymous"
         />
+      </head>
+      <body className={`${zenMaruGothic.variable} antialiased`}>
         {children}
       </body>
     </html>
