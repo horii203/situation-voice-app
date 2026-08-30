@@ -14,6 +14,8 @@ function getPrice(len: number): number | "無料" | null {
   return 1000;
 }
 
+const MAINTENANCE_MODE = true;
+
 export default function Home() {
   const [text, setText] = useState("");
   const [isGenerating, setIsGenerating] = useState(false);
@@ -110,6 +112,12 @@ export default function Home() {
           </div>
 
           <div className="space-y-6">
+            {MAINTENANCE_MODE && (
+              <div className="bg-yellow-50 border border-yellow-200 rounded-xl px-5 py-3 text-yellow-700 text-sm text-center">
+                ⚠️
+                ただいまメンテナンス中のため、音声生成をご利用いただけません。
+              </div>
+            )}
             <div>
               <textarea
                 id="script-input"
@@ -118,7 +126,8 @@ export default function Home() {
                 placeholder="ここに読み上げたいテキストを入力..."
                 rows={8}
                 maxLength={5000}
-                className={`w-full bg-white rounded-xl px-4 py-3 border resize-none text-sm leading-relaxed ${styles.textarea}`}
+                disabled={MAINTENANCE_MODE}
+                className={`w-full bg-white rounded-xl px-4 py-3 border resize-none text-sm leading-relaxed disabled:opacity-50 disabled:cursor-not-allowed ${styles.textarea}`}
               />
               <div className="mt-2 text-right text-sm">
                 <span
@@ -148,7 +157,7 @@ export default function Home() {
 
             <button
               onClick={handleGenerate}
-              disabled={isGenerating || !text.trim()}
+              disabled={MAINTENANCE_MODE || isGenerating || !text.trim()}
               className={`w-full py-4 rounded-full font-bold text-lg transition-all duration-200 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed active:scale-[0.99] shadow-sm ${styles.btnGenerate}`}
             >
               {isGenerating ? (
